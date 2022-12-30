@@ -31,7 +31,7 @@ Create a new repository from the [**Chirpy Starter**][use-starter] and name it `
 And then execute:
 
 ```console
-$ bash tools/init.sh
+$ bash tools/init
 ```
 
 > If you don't want to deploy your site on GitHub Pages, append option `--no-gh` at the end of the above command.
