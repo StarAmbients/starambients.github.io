@@ -35,6 +35,9 @@ github:
 twitter:
   username: StarAmbients            # change to your twitter username
 
+linkedin:
+  username: deboraschuchdarosa      # change to your linkedin
+
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
@@ -45,7 +48,7 @@ social:
     - https://twitter.com/starambients      # change to your twitter homepage
     - https://github.com/StarAmbients       # change to your github homepage
     # Uncomment below to add more social links
-    # - https://www.facebook.com/username
+    - https://discordapp.com/users/debora_inf#1525
     - https://www.linkedin.com/in/deboraschuchdarosa/
 
 google_site_verification:               # fill in to your verification string
