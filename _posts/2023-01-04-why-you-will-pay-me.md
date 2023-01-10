@@ -106,36 +106,37 @@ const handleInputOnChange = () => {
 }
 ```
 
-### Author Information
+### I had problems with the rendering of the screen
 
-O primeiro valor nao está sendo imprimido em tela, por que? parece que está sempre um valor atrasado.
+The first value is not being printed to the screen, why? it seems like there's always a late value.
 
-Para eu poder ajudá-lo, seria importante ver o contexto completo em que a função handleInputOnChange está sendo usada. Alguns possíveis motivos pelos quais o primeiro valor pode não estar sendo exibido são:
+In order for me to be able to help you, it would be important to see the full context in which the handleInputOnChange function is being used. Some possible reasons why the first value might not be showing are:
 
-    O componente que está sendo renderizado possui um estado inicial para o deliveryNumber, que pode estar sendo exibido antes de a função handleInputOnChange ser executada.
-    A função handleInputOnChange pode estar sendo acionada por um evento que demora algum tempo para ser disparado, como o focus, o que pode resultar em um atraso na atualização da tela.
+    The component being rendered has an initial state for the deliveryNumber, which may be displayed before the handleInputOnChange function is executed.
+    The handleInputOnChange function may be triggered by an event that takes some time to fire, such as focus, which may result in a delay in refreshing the screen.
 
-Sem ver mais contexto, é difícil afirmar com certeza qual é o problema. Sugiro verificar a inicialização do estado do componente e também os eventos que estão acionando a função handleInputOnChange.
+Without seeing more context, it's hard to say with certainty what the problem is. I suggest checking the initialization of the component state and also the events that are triggering the handleInputOnChange function.
 
+### I needed to understand better the use of the useeffect in Raact
 Explique-nos os estados do useeffect do react
 
-O hook useEffect do React é uma função que permite a você executar efeitos colaterais em seu componente, ou seja, efeitos que ocorrem fora do próprio componente, como chamadas de API, modificações no DOM, entre outros.
+React's useEffect hook is a function that allows you to run side effects in your component, that is, effects that occur outside the component itself, such as API calls, DOM modifications, among others.
 
-O useEffect pode ter três estados:
+useEffect can have three states:
 
-    Executando pela primeira vez: Quando o componente é renderizado pela primeira vez, o useEffect é executado imediatamente após a renderização.
+    First time running: When the component is rendered for the first time, the useEffect is executed immediately after rendering.
+    
+    Running after updates: If the component is updated (for example, due to a change in a state or property), useEffect runs again after the update is rendered.
 
-    Executando após atualizações: Se o componente for atualizado (por exemplo, devido a uma alteração em um estado ou propriedade), o useEffect é executado novamente após a renderização da atualização.
+    Unmounting: When the component is unmounted (removed from the component tree), useEffect can be set to run again. This is useful for cleaning up any side effects the component has caused, such as canceling an ongoing API call.
 
-    Desmontando: Quando o componente é desmontado (removido da árvore de componentes), o useEffect pode ser configurado para ser executado novamente. Isso é útil para limpar qualquer efeito colateral que o componente tenha causado, como cancelar uma chamada de API em andamento.
+To control when useEffect should be called, you can pass a list of dependencies as the function's second argument. useEffect will be executed whenever one of these dependencies changes. If the list is empty, useEffect will only be executed once, after the first rendering of the component.
 
-Para controlar quando o useEffect deve ser executado, você pode passar uma lista de dependências como segundo argumento da função. O useEffect será executado sempre que uma dessas dependências for alterada. Se a lista estiver vazia, o useEffect só será executado uma vez, após a primeira renderização do componente.
+Mmmm... hooks, somewhere in time I studied that. I decided to ask Tobby to rewrite my function: -"Can you change our handleInputOnChange function to use useeffect?"
 
-Podes mudar nossa funçao handleInputOnChange para utilizar useeffect?
+Yes, it is possible to use the useEffect hook instead of the handleInputOnChange function. The handleInputOnChange function would be turned into a side effect that runs whenever the value of deliveryNumber changes.
 
-Sim, é possível utilizar o hook useEffect em vez da função handleInputOnChange. A função handleInputOnChange seria transformada em um efeito colateral que é executado sempre que o valor de deliveryNumber for alterado.
-
-Aqui está como ficaria o código:
+Here is what the code would look like:
 
 
 
@@ -156,19 +157,19 @@ function MeuComponente() {
     }
   }, [deliveryNumber]);
 
-  // ... o resto do código do componente
+  // ... the rest of the component code
 }
 ```
 
 
-Observe que o código da função handleInputOnChange foi colocado dentro do useEffect. Além disso, adicionei uma lista de dependências como segundo argumento da função, para que o useEffect seja executado sempre que o valor de deliveryNumber for alterado.
+Note that the handleInputOnChange function code has been placed inside useEffect. Also, I've added a list of dependencies as the function's second argument, so that useEffect is called whenever deliveryNumber's value changes.
 
-Agora, ao invés de usarmos a função handleInputOnChange como uma propriedade de um elemento, nós podemos controlar o efeito colateral diretamente no componente. Isso pode ser útil se você quiser executar alguma lógica sempre que o valor de deliveryNumber for alterado, sem precisar se preocupar com a captura de eventos ou com a definição de propriedades.
-E como fica o onchange do input?
+Now, instead of using the handleInputOnChange function as a property of an element, we can control the side effect directly in the component. This can be useful if you want to run some logic whenever the value of deliveryNumber changes, without having to worry about catching events or setting properties.
+And how is the input onchange?
 
-Se você estiver utilizando o useEffect em vez da função handleInputOnChange, o evento onChange do input pode ser usado da mesma forma. A única diferença é que, ao invés de chamar a função handleInputOnChange, você precisará atualizar o valor de deliveryNumber diretamente.
+If you are using useEffect instead of the handleInputOnChange function, the input's onChange event can be used in the same way. The only difference is that instead of calling the handleInputOnChange function, you will need to update the value of deliveryNumber directly.
 
-Aqui está como ficaria o código completo do componente:
+Here's what the complete code for the component would look like:
 
 ```javascript 
 import { useState, useEffect } from 'react';
@@ -195,12 +196,15 @@ function MeuComponente() {
   );
 }
 ```
-Agora, ao digitar algo no input, o valor de deliveryNumber será atualizado e o useEffect será executado, alterando o valor de entryNumberData e exibindo as mensagens no console.
-Me explique o useState, e quais sao as outras alternativas?
+Now, when typing something in the input, the value of deliveryNumber will be updated and the useEffect will be executed, changing the value of entryNumberData and displaying the messages in the console.
 
-O hook useState é uma função do React que permite que você adicione estado aos seus componentes funcionais. Ele retorna um par de valores: o estado atual e uma função para atualizá-lo.
+### There would be alternatives to the use of states?
 
-Por exemplo, aqui está como o useState é usado para adicionar o estado count a um componente:
+Better to explore. Again, I turnet to Tobby: "Explain to me the useState, and show me what are the other alternatives to it, if."
+
+The useState hook is a React function that allows you to add state to your functional components. It returns a pair of values: the current state and a function to update it.
+
+For example, here's how useState is used to add count state to a component:
 
 ```javascript
 import { useState } from 'react';
@@ -216,14 +220,14 @@ function MeuComponente() {
   );
 }
 ```
-No exemplo acima, o componente possui o estado count, inicialmente definido como 0, e a função setCount para atualizá-lo. Quando o botão é clicado, a função é chamada para incrementar o valor de count.
+In the example above, the component has the count state, initially set to 0, and the setCount function to update it. When the button is clicked, the function is called to increment the count value.
 
-O useState é uma alternativa ao uso de classes para criar componentes com estado. Ao invés de criar uma classe e escrever métodos para gerenciar o estado, você pode usar o useState em componentes funcionais para obter o mesmo resultado.
+useState is an alternative to using classes to create stateful components. Rather than creating a class and writing methods to manage state, you can useState in functional components to achieve the same result.
 
-Outras alternativas para gerenciar o estado em componentes do React são o Redux e o Context API. Essas ferramentas são mais avançadas e permitem gerenciar o estado em aplicações maiores, mas requerem mais configuração e podem ser mais complexas de se trabalhar. O useState é uma opção mais simples e fácil de usar, principalmente em aplicações pequenas ou em componentes isolados.
-E se fosse emm Context API? como ficaria?
+Other alternatives for managing state in React components are Redux and the Context API. These tools are more advanced and allow you to manage state in larger applications, but they require more configuration and can be more complex to work with. useState is a simpler and easier to use option, especially in small applications or in isolated components.
+What if it was emm Context API? how would it be?
 
-Se você quiser usar o Context API para gerenciar o estado em vez do useState, o código ficaria mais ou menos assim:
+If you wanted to use the Context API to manage state instead of useState, the code would look something like this:
 
 
 
@@ -256,13 +260,13 @@ function App() {
   );
 }
 ```
-No código acima, criamos um contexto chamado CountContext e o fornecemos para o componente MeuComponente como um provedor. Em seguida, o componente consome o contexto com useContext e obtém o valor atual e a função para atualizá-lo.
+In the code above, we created a context called CountContext and provided it to the MyComponent component as a provider. The component then consumes the context with useContext and gets the current value and the function to update it.
 
-Diferentemente do useState, o Context API permite que você compartilhe o estado entre componentes que estejam em diferentes partes da árvore de componentes, sem precisar passar props manualmente de pai para filho. Isso pode ser útil em aplicações maiores, mas requer mais configuração e pode ser um pouco mais complexo de se trabalhar. O useState é uma opção mais simples e fácil de usar, principalmente em aplicações pequenas ou em componentes isolados.
+Unlike useState, the Context API allows you to share state between components that are in different parts of the component tree, without having to pass props manually from parent to child. This can be useful in larger applications, but it requires more setup and can be a bit more complex to work with. useState is a simpler and easier to use option, especially in small applications or in isolated components.
 starambients@gmail.com
-E se fosse em Redux, como ficaria?
+And if it was in Redux, how would it look?
 
-Se você quiser usar o Redux para gerenciar o estado em vez do useState, o código ficaria mais ou menos assim:
+If you wanted to use Redux to manage state instead of useState, the code would look something like this:
 
 
 ```javascript
@@ -291,6 +295,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(MeuComponente);
 ```
-No código acima, usamos o connect do react-redux para mapear o estado e as actions do Redux para as props do componente. Em seguida, passamos o componente como argumento para o connect, que retorna um novo componente enriquecido com as props mapeadas.
+In the code above, we used connect from react-redux to map Redux state and actions to component props. Next, we pass the component as an argument to connect, which returns a new component enriched with the mapped props.
 
-O Redux é uma ferramenta poderosa para gerenciar o estado em aplicações maiores, mas requer mais configuração e pode ser mais complexo de se trabalhar. O useState é uma opção mais simples e fácil de usar, principalmente em aplicações pequenas ou em componentes isolados.
+Redux is a powerful tool for managing state in larger applications, but it requires more configuration and can be more complex to work with. useState is a simpler and easier to use option, especially in small applications or in isolated components.
